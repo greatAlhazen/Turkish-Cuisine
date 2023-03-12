@@ -1,23 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Food</title>
-  </head>
-  <body>
+<% layout('layout/boilerplate')%>
+<div class="row">
+  <h1 class="text-center">New Food</h1>
+  <div class="col-6 offset-3">
     <form action="/foods" method="POST">
-      <div>
-        <label for="title">Title</label>
-        <input type="text" id="title" name="food[title]" />
+      <div class="mb-4">
+        <label class="form-label" for="title">Food Title</label>
+        <input class="form-control" type="text" id="title" name="food[title]" />
       </div>
-      <div>
-        <label for="location">Location</label>
-        <input type="text" id="location" name="food[location]" />
+      <div class="mb-4">
+        <label class="form-label" for="location">Food Location</label>
+        <input
+          class="form-control"
+          type="text"
+          id="location"
+          name="food[location]"
+        />
       </div>
-      <button type="submit">Add Food</button>
+      <div class="mb-4">
+        <label class="form-label" for="image">Image Url</label>
+        <input class="form-control" type="text" id="image" name="food[image]" />
+      </div>
+      <div class="mb-4">
+        <label class="form-label" for="price">Food Price</label>
+        <div class="input-group">
+          <span class="input-group-text" id="price-label">$</span>
+          <input
+            type="text"
+            class="form-control"
+            id="price"
+            placeholder="0.00"
+            aria-label="price"
+            aria-describedby="price-label"
+            name="food[price]"
+          />
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" for="description">Food Description</label>
+        <textarea
+          class="form-control"
+          type="text"
+          id="description"
+          name="food[description]"
+        ></textarea>
+      </div>
+      <div class="mb-4">
+        <button class="btn btn-dark">Add Food</button>
+      </div>
     </form>
     <a href="/foods">All Foods</a>
-  </body>
-</html>
+  </div>
+</div>

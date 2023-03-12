@@ -12,12 +12,13 @@ const saveRandom = async () => {
   await Food.deleteMany({});
 
   for (let i = 0; i <= 20; i++) {
+    const price = Math.floor(Math.random() * 80) + 5;
     const food = new Food({
       location: `${randomValue(places)}`,
       title: `${randomValue(foods)}`,
-      description: `Lorem ipsum dolor sit amet,
-             consectetur adipiscing elit, 
-             sed do eiusmod tempor incididunt ut labore et`,
+      description: `Lorem ipsum dolor sit amet,consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et`,
+      price,
+      image: "https://source.unsplash.com/collection/8351798/300*300",
     });
 
     await food.save();

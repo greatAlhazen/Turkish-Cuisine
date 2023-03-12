@@ -4,6 +4,7 @@ import dbConnection from "./config/db.js";
 import dotenv from "dotenv";
 import Food from "./models/food.js";
 import methodOverride from "method-override";
+import ejsMate from "ejs-mate";
 
 //bug solved related path
 import { fileURLToPath } from "url";
@@ -23,6 +24,8 @@ const app = express();
 const DB_URL = process.env.DB_URL || "mongodb://localhost:27017/food";
 dbConnection(DB_URL);
 
+//ejsMate template initialize for layout
+app.engine("ejs", ejsMate);
 //ejs template usage
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -35,7 +38,7 @@ app.use(methodOverride("_method"));
 
 //test routes
 app.get("/", (req, res) => {
-  res.render("test");
+  res.render("home");
 });
 
 //food test routes
