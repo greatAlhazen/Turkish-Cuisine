@@ -1,0 +1,9 @@
+<% layout('layout/boilerplate')%>
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="text-center">
+    <h1 class="display-1 fw-bold"><%= status %></h1>
+    <p class="fs-3 text-danger"><span>Opps!</span> <%= message %></p>
+    <p class="lead"><%= stack %></p>
+    <a href="/foods" class="btn btn-danger">Go Foods</a>
+  </div>
+</div>

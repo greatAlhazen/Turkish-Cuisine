@@ -2,7 +2,12 @@
 <div class="row">
   <h1 class="text-center">Edit Food</h1>
   <div class="col-6 offset-3">
-    <form action="/foods/<%=food._id%>?_method=PUT" method="POST">
+    <form
+      action="/foods/<%=food._id%>?_method=PUT"
+      method="POST"
+      novalidate
+      class="form-validation"
+    >
       <div class="mb-3">
         <label class="form-label" for="title">Food Title</label>
         <input
@@ -11,7 +16,9 @@
           id="title"
           name="food[title]"
           value="<%=food.title %>"
+          required
         />
+        <div class="valid-feedback">fine!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Food Location</label>
@@ -21,7 +28,9 @@
           id="location"
           name="food[location]"
           value="<%=food.location %>"
+          required
         />
+        <div class="valid-feedback">fine!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Image Url</label>
@@ -31,7 +40,9 @@
           id="image"
           name="food[image]"
           value="<%=food.image %>"
+          required
         />
+        <div class="valid-feedback">fine!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="price">Food Price</label>
@@ -46,7 +57,9 @@
             aria-describedby="price-label"
             name="food[price]"
             value="<%=+food.price %>"
+            required
           />
+          <div class="valid-feedback">fine!</div>
         </div>
       </div>
 
@@ -57,9 +70,11 @@
           type="text"
           id="description"
           name="food[description]"
+          required
         >
 <%= food.description%></textarea
         >
+        <div class="valid-feedback">fine!</div>
       </div>
       <div class="mb-3">
         <button class="btn btn-dark">Update Food</button>

@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import Food from "./models/food.js";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
+import createError from "./utils/error.js";
+import catchAsync from "./utils/catchAsync.js";
+import foodSchema from "./joi-schemas.js";
 
 //bug solved related path
 import { fileURLToPath } from "url";
@@ -30,6 +33,17 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// joi validation
+const foodValidation = (req, res, next) => {
+  const { error } = foodSchema.validate(req.body);
+  if (error) {
+    const errorMessage = error.details.map((e) => e.message).join(",");
+    next(createError(400, errorMessage));
+  } else {
+    next();
+  }
+};
+
 //body parser for post
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,44 +56,77 @@ app.get("/", (req, res) => {
 });
 
 //food test routes
-app.get("/foods", async (req, res) => {
-  const foods = await Food.find({});
-  res.render("foods/all", { foods });
-});
+app.get(
+  "/foods",
+  catchAsync(async (req, res) => {
+    const foods = await Food.find({});
+    res.render("foods/all", { foods });
+  })
+);
 
 app.get("/foods/new", (req, res) => {
   res.render("foods/new");
 });
 
-app.post("/foods", async (req, res) => {
-  const food = new Food(req.body.food);
-  await food.save();
-  res.redirect(`/foods/${food._id}`);
+app.post(
+  "/foods",
+  foodValidation,
+  catchAsync(async (req, res) => {
+    const food = new Food(req.body.food);
+    await food.save();
+    res.redirect(`/foods/${food._id}`);
+  })
+);
+
+app.get(
+  "/foods/:id",
+  catchAsync(async (req, res) => {
+    const food = await Food.findById(req.params.id);
+    res.render("foods/one", { food });
+  })
+);
+
+app.get(
+  "/foods/:id/edit",
+  catchAsync(async (req, res) => {
+    const food = await Food.findById(req.params.id);
+    res.render("foods/edit", { food });
+  })
+);
+
+app.put(
+  "/foods/:id",
+  foodValidation,
+  catchAsync(async (req, res) => {
+    const food = await Food.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body.food },
+      { new: true }
+    );
+
+    res.redirect(`/foods/${food._id}`);
+  })
+);
+
+app.delete(
+  "/foods/:id",
+  catchAsync(async (req, res) => {
+    await Food.findByIdAndDelete(req.params.id);
+    res.redirect("/foods");
+  })
+);
+
+// doesn't exists page
+app.use("*", (req, res, next) => {
+  next(createError(404, "Page Not Found"));
 });
 
-app.get("/foods/:id", async (req, res) => {
-  const food = await Food.findById(req.params.id);
-  res.render("foods/one", { food });
-});
-
-app.get("/foods/:id/edit", async (req, res) => {
-  const food = await Food.findById(req.params.id);
-  res.render("foods/edit", { food });
-});
-
-app.put("/foods/:id", async (req, res) => {
-  const food = await Food.findByIdAndUpdate(
-    req.params.id,
-    { ...req.body.food },
-    { new: true }
-  );
-
-  res.redirect(`/foods/${food._id}`);
-});
-
-app.delete("/foods/:id", async (req, res) => {
-  await Food.findByIdAndDelete(req.params.id);
-  res.redirect("/foods");
+//custom error middleware
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Something went wrong";
+  const stack = err.stack;
+  res.status(status).render("error", { status, message, stack });
 });
 
 //application listen on specified port
