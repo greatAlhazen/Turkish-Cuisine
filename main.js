@@ -7,7 +7,9 @@ import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import createError from "./utils/error.js";
 import catchAsync from "./utils/catchAsync.js";
-import foodSchema from "./joi-schemas.js";
+import { foodSchema } from "./joi-schemas.js";
+import Comment from "./models/comment.js";
+import { commentSchema } from "./joi-schemas.js";
 
 //bug solved related path
 import { fileURLToPath } from "url";
@@ -36,6 +38,16 @@ app.set("views", path.join(__dirname, "views"));
 // joi validation
 const foodValidation = (req, res, next) => {
   const { error } = foodSchema.validate(req.body);
+  if (error) {
+    const errorMessage = error.details.map((e) => e.message).join(",");
+    next(createError(400, errorMessage));
+  } else {
+    next();
+  }
+};
+
+const commentValidation = (req, res, next) => {
+  const { error } = commentSchema.validate(req.body);
   if (error) {
     const errorMessage = error.details.map((e) => e.message).join(",");
     next(createError(400, errorMessage));
@@ -81,7 +93,7 @@ app.post(
 app.get(
   "/foods/:id",
   catchAsync(async (req, res) => {
-    const food = await Food.findById(req.params.id);
+    const food = await Food.findById(req.params.id).populate("comments");
     res.render("foods/one", { food });
   })
 );
@@ -113,6 +125,33 @@ app.delete(
   catchAsync(async (req, res) => {
     await Food.findByIdAndDelete(req.params.id);
     res.redirect("/foods");
+  })
+);
+
+//comment routes
+app.post(
+  "/foods/:id/comments",
+  commentValidation,
+  catchAsync(async (req, res) => {
+    const id = req.params.id;
+    const food = await Food.findById(id);
+    const comment = new Comment(req.body.comment);
+    food.comments.push(comment);
+    await comment.save();
+    await food.save();
+    res.redirect(`/foods/${food._id}`);
+  })
+);
+
+app.delete(
+  "/foods/:foodId/comments/:commentId",
+  catchAsync(async (req, res) => {
+    const { foodId, commentId } = req.params;
+    await Food.findByIdAndUpdate(foodId, {
+      $pull: { comments: commentId },
+    });
+    await Comment.findByIdAndDelete(commentId);
+    res.redirect(`/foods/${foodId}`);
   })
 );
 
