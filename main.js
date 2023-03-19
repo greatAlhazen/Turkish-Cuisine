@@ -2,14 +2,13 @@ import express from "express";
 import path from "path";
 import dbConnection from "./config/db.js";
 import dotenv from "dotenv";
-import Food from "./models/food.js";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import createError from "./utils/error.js";
-import catchAsync from "./utils/catchAsync.js";
-import { foodSchema } from "./joi-schemas.js";
-import Comment from "./models/comment.js";
-import { commentSchema } from "./joi-schemas.js";
+import foodRouter from "./routes/food.js";
+import commentRouter from "./routes/comment.js";
+import session from "express-session";
+import flash from "connect-flash";
 
 //bug solved related path
 import { fileURLToPath } from "url";
@@ -35,26 +34,33 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// joi validation
-const foodValidation = (req, res, next) => {
-  const { error } = foodSchema.validate(req.body);
-  if (error) {
-    const errorMessage = error.details.map((e) => e.message).join(",");
-    next(createError(400, errorMessage));
-  } else {
-    next();
-  }
+// static assets
+app.use(express.static(path.join(__dirname, "assets")));
+
+// session configuration
+const SESSION_SECRET = process.env.SESSION_SECRET;
+
+const sessionOptions = {
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 6,
+    maxAge: 1000 * 60 * 60 * 24 * 6,
+  },
 };
 
-const commentValidation = (req, res, next) => {
-  const { error } = commentSchema.validate(req.body);
-  if (error) {
-    const errorMessage = error.details.map((e) => e.message).join(",");
-    next(createError(400, errorMessage));
-  } else {
-    next();
-  }
-};
+app.use(session(sessionOptions));
+
+// flash configuration
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 //body parser for post
 app.use(express.urlencoded({ extended: true }));
@@ -67,93 +73,11 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-//food test routes
-app.get(
-  "/foods",
-  catchAsync(async (req, res) => {
-    const foods = await Food.find({});
-    res.render("foods/all", { foods });
-  })
-);
-
-app.get("/foods/new", (req, res) => {
-  res.render("foods/new");
-});
-
-app.post(
-  "/foods",
-  foodValidation,
-  catchAsync(async (req, res) => {
-    const food = new Food(req.body.food);
-    await food.save();
-    res.redirect(`/foods/${food._id}`);
-  })
-);
-
-app.get(
-  "/foods/:id",
-  catchAsync(async (req, res) => {
-    const food = await Food.findById(req.params.id).populate("comments");
-    res.render("foods/one", { food });
-  })
-);
-
-app.get(
-  "/foods/:id/edit",
-  catchAsync(async (req, res) => {
-    const food = await Food.findById(req.params.id);
-    res.render("foods/edit", { food });
-  })
-);
-
-app.put(
-  "/foods/:id",
-  foodValidation,
-  catchAsync(async (req, res) => {
-    const food = await Food.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body.food },
-      { new: true }
-    );
-
-    res.redirect(`/foods/${food._id}`);
-  })
-);
-
-app.delete(
-  "/foods/:id",
-  catchAsync(async (req, res) => {
-    await Food.findByIdAndDelete(req.params.id);
-    res.redirect("/foods");
-  })
-);
+//food routes
+app.use("/foods", foodRouter);
 
 //comment routes
-app.post(
-  "/foods/:id/comments",
-  commentValidation,
-  catchAsync(async (req, res) => {
-    const id = req.params.id;
-    const food = await Food.findById(id);
-    const comment = new Comment(req.body.comment);
-    food.comments.push(comment);
-    await comment.save();
-    await food.save();
-    res.redirect(`/foods/${food._id}`);
-  })
-);
-
-app.delete(
-  "/foods/:foodId/comments/:commentId",
-  catchAsync(async (req, res) => {
-    const { foodId, commentId } = req.params;
-    await Food.findByIdAndUpdate(foodId, {
-      $pull: { comments: commentId },
-    });
-    await Comment.findByIdAndDelete(commentId);
-    res.redirect(`/foods/${foodId}`);
-  })
-);
+app.use("/foods/:foodId/comments", commentRouter);
 
 // doesn't exists page
 app.use("*", (req, res, next) => {
