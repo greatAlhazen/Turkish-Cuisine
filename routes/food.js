@@ -4,6 +4,7 @@ import catchAsync from "../utils/catchAsync.js";
 import Food from "../models/food.js";
 import createError from "../utils/error.js";
 import { foodSchema } from "../joi-schemas.js";
+import { loggedIn } from "../middleware.js";
 
 const foodValidation = (req, res, next) => {
   const { error } = foodSchema.validate(req.body);
@@ -23,12 +24,13 @@ router.get(
   })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", loggedIn, (req, res) => {
   res.render("foods/new");
 });
 
 router.post(
   "/",
+  loggedIn,
   foodValidation,
   catchAsync(async (req, res) => {
     const food = new Food(req.body.food);
@@ -52,6 +54,7 @@ router.get(
 
 router.get(
   "/:id/edit",
+  loggedIn,
   catchAsync(async (req, res) => {
     const food = await Food.findById(req.params.id);
     if (!food) {
@@ -64,6 +67,7 @@ router.get(
 
 router.put(
   "/:id",
+  loggedIn,
   foodValidation,
   catchAsync(async (req, res) => {
     const food = await Food.findByIdAndUpdate(
@@ -78,6 +82,7 @@ router.put(
 
 router.delete(
   "/:id",
+  loggedIn,
   catchAsync(async (req, res) => {
     await Food.findByIdAndDelete(req.params.id);
     req.flash("success", "Successfully deleted food!");

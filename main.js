@@ -9,6 +9,10 @@ import foodRouter from "./routes/food.js";
 import commentRouter from "./routes/comment.js";
 import session from "express-session";
 import flash from "connect-flash";
+import User from "./models/user.js";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import userRouter from "./routes/user.js";
 
 //bug solved related path
 import { fileURLToPath } from "url";
@@ -53,10 +57,21 @@ const sessionOptions = {
 
 app.use(session(sessionOptions));
 
+// configure passport authentication
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // flash configuration
 app.use(flash());
 
 app.use((req, res, next) => {
+  // current user
+  res.locals.user = req.user;
+  // flash messages
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
@@ -68,10 +83,20 @@ app.use(express.urlencoded({ extended: true }));
 //method override for put and delete
 app.use(methodOverride("_method"));
 
-//test routes
+// test routes
 app.get("/", (req, res) => {
   res.render("home");
 });
+
+/* fake user test
+app.get("/fake-user", async (req, res) => {
+  const user = new User({ mail: "fake@gmail.com", username: "enes" });
+  const savedUser = await User.register(user, "Password");
+  res.send(savedUser);
+}); */
+
+//user routes
+app.use("/", userRouter);
 
 //food routes
 app.use("/foods", foodRouter);

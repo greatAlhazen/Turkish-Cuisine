@@ -5,6 +5,7 @@ import Comment from "../models/comment.js";
 import catchAsync from "../utils/catchAsync.js";
 import createError from "../utils/error.js";
 import { commentSchema } from "../joi-schemas.js";
+import { loggedIn } from "../middleware.js";
 
 const commentValidation = (req, res, next) => {
   const { error } = commentSchema.validate(req.body);
@@ -18,6 +19,7 @@ const commentValidation = (req, res, next) => {
 
 router.post(
   "/",
+  loggedIn,
   commentValidation,
   catchAsync(async (req, res) => {
     const foodId = req.params.foodId;
@@ -33,6 +35,7 @@ router.post(
 
 router.delete(
   "/:commentId",
+  loggedIn,
   catchAsync(async (req, res) => {
     const { foodId, commentId } = req.params;
     await Food.findByIdAndUpdate(foodId, {

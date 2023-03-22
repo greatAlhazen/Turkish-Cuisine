@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const dbConnection = (url) => {
+  mongoose.set("strictQuery", false);
   mongoose
     .connect(url, {
       useNewUrlParser: true,
