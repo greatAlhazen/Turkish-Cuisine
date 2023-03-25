@@ -8,6 +8,10 @@ const FoodSchema = new Schema({
   price: Number,
   location: String,
   image: String,
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   comments: [
     {
       type: Schema.Types.ObjectId,

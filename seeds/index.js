@@ -14,6 +14,7 @@ const saveRandom = async () => {
   for (let i = 0; i <= 20; i++) {
     const price = Math.floor(Math.random() * 80) + 5;
     const food = new Food({
+      owner: "6417fcd25a971dee8633f68e",
       location: `${randomValue(places)}`,
       title: `${randomValue(foods)}`,
       description: `Lorem ipsum dolor sit amet,consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et`,

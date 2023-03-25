@@ -2,19 +2,8 @@ import express from "express";
 const router = express.Router();
 import catchAsync from "../utils/catchAsync.js";
 import Food from "../models/food.js";
-import createError from "../utils/error.js";
-import { foodSchema } from "../joi-schemas.js";
-import { loggedIn } from "../middleware.js";
-
-const foodValidation = (req, res, next) => {
-  const { error } = foodSchema.validate(req.body);
-  if (error) {
-    const errorMessage = error.details.map((e) => e.message).join(",");
-    next(createError(400, errorMessage));
-  } else {
-    next();
-  }
-};
+import { isOwner, loggedIn } from "../middleware.js";
+import { foodValidation } from "../middleware.js";
 
 router.get(
   "/",
@@ -34,6 +23,7 @@ router.post(
   foodValidation,
   catchAsync(async (req, res) => {
     const food = new Food(req.body.food);
+    food.owner = req.user._id;
     await food.save();
     req.flash("success", "Successfully create food!");
     res.redirect(`/foods/${food._id}`);
@@ -43,7 +33,14 @@ router.post(
 router.get(
   "/:id",
   catchAsync(async (req, res) => {
-    const food = await Food.findById(req.params.id).populate("comments");
+    const food = await Food.findById(req.params.id)
+      .populate({
+        path: "comments",
+        populate: {
+          path: "owner",
+        },
+      })
+      .populate("owner");
     if (!food) {
       req.flash("error", "Cannot find food!");
       return res.redirect("/foods");
@@ -55,6 +52,7 @@ router.get(
 router.get(
   "/:id/edit",
   loggedIn,
+  isOwner,
   catchAsync(async (req, res) => {
     const food = await Food.findById(req.params.id);
     if (!food) {
@@ -68,6 +66,7 @@ router.get(
 router.put(
   "/:id",
   loggedIn,
+  isOwner,
   foodValidation,
   catchAsync(async (req, res) => {
     const food = await Food.findByIdAndUpdate(
@@ -83,6 +82,7 @@ router.put(
 router.delete(
   "/:id",
   loggedIn,
+  isOwner,
   catchAsync(async (req, res) => {
     await Food.findByIdAndDelete(req.params.id);
     req.flash("success", "Successfully deleted food!");

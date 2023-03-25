@@ -10,8 +10,10 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item text-muted"><%= food.location%></li>
+        <li class="list-group-item">Posted by <%= food.owner.username%></li>
         <li class="list-group-item">$<%= food.price%>/porsion</li>
       </ul>
+      <% if( user && food.owner.equals(user._id)){ %>
       <div class="card-body">
         <a class="card-link btn btn-info" href="/foods/<%=food._id%>/edit"
           >Edit</a
@@ -24,10 +26,12 @@
           <button class="btn btn-danger">Delete</button>
         </form>
       </div>
+      <% } %>
       <div class="card-footer text-muted">2 days ago</div>
     </div>
   </div>
   <div class="col-6">
+    <% if(user){ %>
     <h3 class="text-center mb-3">Leave a Comment</h3>
     <form
       action="/foods/<%=food._id%>/comments"
@@ -60,21 +64,26 @@
       </div>
       <button class="btn btn-secondary">Send</button>
     </form>
-    <% for(let comment of food.comments) { %>
+    <% } %> <% for(let comment of food.comments) { %>
     <div class="card mb-3">
-      <div class="card-body rounded border border-primary">
+      <div class="card-body">
         <h5 class="card-title">
           <span class="font-italic">Rating: </span><%= comment.rating %>/10
         </h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          By <%= comment.owner.username%>
+        </h6>
         <p class="card-text">
           <span class="font-weight-bold">Comment: </span><%= comment.body %>
         </p>
+        <% if( user && comment.owner.equals(user._id)) {%>
         <form
           action="/foods/<%=food._id%>/comments/<%=comment._id%>?_method=DELETE"
           method="POST"
         >
           <button class="btn btn-danger">Delete</button>
         </form>
+        <% } %>
       </div>
     </div>
     <% } %>
