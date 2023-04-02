@@ -3,8 +3,36 @@
 
 <div class="row">
   <div class="col-6">
+    <div id="foodCarousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <% food.images.forEach((image, i) => { %>
+        <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+          <img src="<%= image.url%>" class="d-block w-100" alt="" />
+        </div>
+        <% }) %>
+      </div>
+      <% if(food.images.length > 1) {%>
+      <a
+        class="carousel-control-prev"
+        href="#foodCarousel"
+        role="button"
+        data-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a
+        class="carousel-control-next"
+        href="#foodCarousel"
+        role="button"
+        data-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+      <% } %>
+    </div>
     <div class="card mb-3">
-      <img src="<%= food.image%>" class="card-img-top" />
       <div class="card-body">
         <h5 class="card-title"><%= food.title%></h5>
         <p class="card-text"><%= food.description%></p>

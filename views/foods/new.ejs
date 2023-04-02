@@ -2,7 +2,13 @@
 <div class="row">
   <h1 class="text-center">New Food</h1>
   <div class="col-6 offset-3">
-    <form action="/foods" method="POST" novalidate class="form-validation">
+    <form
+      action="/foods"
+      method="POST"
+      enctype="multipart/form-data"
+      novalidate
+      class="form-validation"
+    >
       <div class="mb-4">
         <label class="form-label" for="title">Food Title</label>
         <input
@@ -24,17 +30,6 @@
           required
         />
         <div class="invalid-feedback">Please choose location.</div>
-      </div>
-      <div class="mb-4">
-        <label class="form-label" for="image">Image Url</label>
-        <input
-          class="form-control"
-          type="text"
-          id="image"
-          name="food[image]"
-          required
-        />
-        <div class="invalid-feedback">Please add image url.</div>
       </div>
       <div class="mb-4">
         <label class="form-label" for="price">Food Price</label>
@@ -66,9 +61,31 @@
         <div class="invalid-feedback">Please add description.</div>
       </div>
       <div class="mb-4">
+        <div class="form-file custom-file">
+          <input
+            type="file"
+            class="form-file-input form-control"
+            id="photo"
+            name="photo"
+            multiple
+            required
+          />
+          <div class="invalid-feedback">Please solve all error</div>
+          <label class="form-file-label" for="photo">
+            <span class="form-file-text custom-file-label"
+              >Add more image or images</span
+            >
+            <span class="form-file-button">Browse</span>
+          </label>
+        </div>
+        <div class="file-validation"></div>
+      </div>
+      <div class="mb-4">
         <button class="btn btn-dark">Add Food</button>
       </div>
     </form>
     <a href="/foods">All Foods</a>
   </div>
 </div>
+
+<script src="/js/fileValidation.js"></script>

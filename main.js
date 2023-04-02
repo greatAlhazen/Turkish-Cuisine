@@ -1,7 +1,12 @@
+//env config
+import dotenv from "dotenv";
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
 import express from "express";
 import path from "path";
 import dbConnection from "./config/db.js";
-import dotenv from "dotenv";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
 import createError from "./utils/error.js";
@@ -19,11 +24,6 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-//env config
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
 
 //initialize app
 const app = express();

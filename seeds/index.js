@@ -19,7 +19,16 @@ const saveRandom = async () => {
       title: `${randomValue(foods)}`,
       description: `Lorem ipsum dolor sit amet,consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et`,
       price,
-      image: "https://source.unsplash.com/collection/8351798/300*300",
+      images: [
+        {
+          url: "https://res.cloudinary.com/dd0j3jaxj/image/upload/v1680075625/FoodApp/tzyn5ptigky4ad70ler5.jpg",
+          filename: "FoodApp/tzyn5ptigky4ad70ler5",
+        },
+        {
+          url: "https://res.cloudinary.com/dd0j3jaxj/image/upload/v1680075627/FoodApp/q1vwu7f43rn2bvbpdxsz.jpg",
+          filename: "FoodApp/q1vwu7f43rn2bvbpdxsz",
+        },
+      ],
     });
 
     await food.save();

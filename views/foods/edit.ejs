@@ -7,6 +7,7 @@
       method="POST"
       novalidate
       class="form-validation"
+      enctype="multipart/form-data"
     >
       <div class="mb-3">
         <label class="form-label" for="title">Food Title</label>
@@ -28,18 +29,6 @@
           id="location"
           name="food[location]"
           value="<%=food.location %>"
-          required
-        />
-        <div class="valid-feedback">fine!</div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label" for="image">Image Url</label>
-        <input
-          class="form-control"
-          type="text"
-          id="image"
-          name="food[image]"
-          value="<%=food.image %>"
           required
         />
         <div class="valid-feedback">fine!</div>
@@ -77,9 +66,43 @@
         <div class="valid-feedback">fine!</div>
       </div>
       <div class="mb-3">
+        <div class="form-file custom-file">
+          <input
+            type="file"
+            class="form-file-input"
+            id="photo"
+            name="photo"
+            multiple
+          />
+          <label class="form-file-label" for="photo">
+            <span class="form-file-text custom-file-label"
+              >Load more image or images</span
+            >
+            <span class="form-file-button">Browse</span>
+          </label>
+        </div>
+        <div class="file-validation"></div>
+      </div>
+      <div class="mb-3">
+        <% food.images.forEach(function(image, index) { %>
+        <img src="<%=image.smallSize %>" class="img-thumbnail" alt="" />
+        <div class="form-check-inline">
+          <input
+            type="checkbox"
+            id="image-<%=index%>"
+            name="images[]"
+            value="<%=image.filename%>"
+          />
+        </div>
+        <label for="image-<%=image%>">Delete</label>
+        <% })%>
+      </div>
+      <div class="mb-3">
         <button class="btn btn-dark">Update Food</button>
       </div>
     </form>
     <a href="/foods/<%= food._id%>">Back To Food</a>
   </div>
 </div>
+
+<script src="/js/fileValidation.js"></script>

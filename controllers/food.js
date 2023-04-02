@@ -1,4 +1,5 @@
 import Food from "../models/food.js";
+import { cloudinaryVTwo } from "../config/cloudinary.js";
 
 export const getFoods = async (req, res) => {
   const foods = await Food.find({});
@@ -6,8 +7,14 @@ export const getFoods = async (req, res) => {
 };
 
 export const createFood = async (req, res) => {
+  console.log(req.body.food);
   const food = new Food(req.body.food);
+  food.images = req.files.map((file) => ({
+    url: file.path,
+    filename: file.filename,
+  }));
   food.owner = req.user._id;
+  console.log(food);
   await food.save();
   req.flash("success", "Successfully create food!");
   res.redirect(`/foods/${food._id}`);
@@ -39,6 +46,20 @@ export const updateFood = async (req, res) => {
     { ...req.body.food },
     { new: true }
   );
+  const imageArray = req.files.map((file) => ({
+    url: file.path,
+    filename: file.filename,
+  }));
+  food.images.push(...imageArray);
+  await food.save();
+  if (req.body.images) {
+    for (let filename of req.body.images) {
+      await cloudinaryVTwo.uploader.destroy(filename);
+    }
+    await food.updateOne({
+      $pull: { images: { filename: { $in: req.body.images } } },
+    });
+  }
   req.flash("success", "Successfully updated food!");
   res.redirect(`/foods/${food._id}`);
 };
