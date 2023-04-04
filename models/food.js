@@ -16,6 +16,17 @@ const FoodSchema = new Schema({
   description: String,
   price: Number,
   location: String,
+  mapLocation: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
   images: [PhotoSchema],
   owner: {
     type: Schema.Types.ObjectId,

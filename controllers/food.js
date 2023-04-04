@@ -1,5 +1,6 @@
 import Food from "../models/food.js";
 import { cloudinaryVTwo } from "../config/cloudinary.js";
+import opencage from "opencage-api-client";
 
 export const getFoods = async (req, res) => {
   const foods = await Food.find({});
@@ -7,14 +8,16 @@ export const getFoods = async (req, res) => {
 };
 
 export const createFood = async (req, res) => {
-  console.log(req.body.food);
+  const response = await opencage.geocode({ q: req.body.food.location });
+  const { lat, lng } = response.results[0].geometry;
   const food = new Food(req.body.food);
   food.images = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
   }));
+  // prettier-ignore
+  food.mapLocation = { "type": "Point", "coordinates": [lng, lat] };
   food.owner = req.user._id;
-  console.log(food);
   await food.save();
   req.flash("success", "Successfully create food!");
   res.redirect(`/foods/${food._id}`);
@@ -41,6 +44,15 @@ export const getFood = async (req, res) => {
 };
 
 export const updateFood = async (req, res) => {
+  const oldFood = await Food.findById(req.params.id);
+  if (oldFood.location !== req.body.food.location) {
+    const response = await opencage.geocode({ q: req.body.food.location });
+    const { lat, lng } = response.results[0].geometry;
+    // prettier-ignore
+    req.body.food.mapLocation = { "type": "Point", "coordinates": [lng, lat] };
+  }
+
+  console.log(req.body.food.mapLocation);
   const food = await Food.findByIdAndUpdate(
     req.params.id,
     { ...req.body.food },
@@ -60,6 +72,7 @@ export const updateFood = async (req, res) => {
       $pull: { images: { filename: { $in: req.body.images } } },
     });
   }
+
   req.flash("success", "Successfully updated food!");
   res.redirect(`/foods/${food._id}`);
 };

@@ -19,6 +19,10 @@ const saveRandom = async () => {
       title: `${randomValue(foods)}`,
       description: `Lorem ipsum dolor sit amet,consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et`,
       price,
+      mapLocation: {
+        type: "Point",
+        coordinates: [37.8930036, 41.118369],
+      },
       images: [
         {
           url: "https://res.cloudinary.com/dd0j3jaxj/image/upload/v1680075625/FoodApp/tzyn5ptigky4ad70ler5.jpg",
