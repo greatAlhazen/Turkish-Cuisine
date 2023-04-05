@@ -16,7 +16,7 @@ export const createFood = async (req, res) => {
     filename: file.filename,
   }));
   // prettier-ignore
-  food.mapLocation = { "type": "Point", "coordinates": [lng, lat] };
+  food.geometry = { "type": "Point", "coordinates": [lng, lat] };
   food.owner = req.user._id;
   await food.save();
   req.flash("success", "Successfully create food!");
@@ -49,7 +49,7 @@ export const updateFood = async (req, res) => {
     const response = await opencage.geocode({ q: req.body.food.location });
     const { lat, lng } = response.results[0].geometry;
     // prettier-ignore
-    req.body.food.mapLocation = { "type": "Point", "coordinates": [lng, lat] };
+    req.body.food.geometry = { "type": "Point", "coordinates": [lng, lat] };
   }
 
   console.log(req.body.food.mapLocation);

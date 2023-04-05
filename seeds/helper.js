@@ -11,17 +11,3 @@ export const foods = [
   "Künefe",
   "Patlıcan kebabı",
 ];
-
-export const places = [
-  "Kayseri",
-  "Gaziantep",
-  "Adana",
-  "Batman",
-  "Konya",
-  "Bursa",
-  "Gaziantep",
-  "Şanlıurfa",
-  "Diyarbakır",
-  "Hatay",
-  "Şanlıurfa",
-];

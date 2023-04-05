@@ -1,7 +1,5 @@
 <% layout('layout/boilerplate')%>
-<div>
-  <a href="/foods/new">Add Food</a>
-</div>
+<div id="map" style="width: 100%; height: 500px"></div>
 
 <% for (let food of foods){%>
 <div class="card mb-4">
@@ -12,7 +10,7 @@
     <div class="col-md-7">
       <div class="card-body">
         <h5 class="card-title"><%= food.title %></h5>
-        <p class="card-text"><%= food.description %></p>
+        <h5 class="card-title"><%= food.title %></h5>
         <p class="card-text">
           <small class="text-muted"><%= food.location%></small>
         </p>
@@ -24,3 +22,12 @@
   </div>
 </div>
 <% }%>
+
+<script>
+  const mapApi = "<%-process.env.MAP_API%>";
+    // // prettier-ignore
+  //nolint:gosec
+  const foods = {features: <%- JSON.stringify(foods) %>};
+</script>
+
+<script src="/js/handleClusterMap.js"></script>

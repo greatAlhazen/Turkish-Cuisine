@@ -1,5 +1,5 @@
-const lang = food.mapLocation.coordinates[0];
-const lat = food.mapLocation.coordinates[1];
+const lang = food.geometry.coordinates[0];
+const lat = food.geometry.coordinates[1];
 
 const map = new maplibregl.Map({
   container: "map",
