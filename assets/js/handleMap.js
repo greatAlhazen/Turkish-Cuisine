@@ -8,6 +8,8 @@ const map = new maplibregl.Map({
   zoom: 9,
 });
 
+map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+
 const marker = new maplibregl.Marker({
   color: "#fedf17",
 })

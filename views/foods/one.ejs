@@ -39,30 +39,32 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item text-muted"><%= food.location%></li>
-        <li class="list-group-item">Posted by <%= food.owner.username%></li>
-        <li class="list-group-item">$<%= food.price%>/porsion</li>
+        <li class="list-group-item">
+          <%= food.owner.username%> tarafından eklendi
+        </li>
+        <li class="list-group-item">$<%= food.price%>/porsiyon</li>
       </ul>
       <% if( user && food.owner.equals(user._id)){ %>
       <div class="card-body">
         <a class="card-link btn btn-info" href="/foods/<%=food._id%>/edit"
-          >Edit</a
+          >Düzenle</a
         >
         <form
           class="d-inline"
           action="/foods/<%=food._id%>?_method=DELETE"
           method="POST"
         >
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger">Sil</button>
         </form>
       </div>
       <% } %>
-      <div class="card-footer text-muted">2 days ago</div>
+      <div class="card-footer text-muted">2 gün önce</div>
     </div>
   </div>
   <div class="col-6">
-    <div id="map" style="width: 100%; height: 300px"></div>
+    <div id="map" class="mb-3" style="width: 100%; height: 300px"></div>
     <% if(user){ %>
-    <h3 class="text-center mb-3">Leave a Comment</h3>
+    <h3 class="text-center mb-3">Yorum bırak</h3>
     <form
       action="/foods/<%=food._id%>/comments"
       method="POST"
@@ -118,7 +120,7 @@
         </fieldset>
       </div>
       <div class="mb-3">
-        <label class="form-label" for="body">Your Opinion:</label>
+        <label class="form-label" for="body">Görüşün:</label>
         <textarea
           class="form-control"
           name="comment[body]"
@@ -127,28 +129,28 @@
           rows="3"
           required
         ></textarea>
-        <div class="valid-feedback">fine!</div>
+        <div class="valid-feedback">Doğru!</div>
       </div>
-      <button class="btn btn-secondary">Send</button>
+      <button class="btn btn-secondary">Ekle</button>
     </form>
     <% } %> <% for(let comment of food.comments) { %>
     <div class="card mb-3">
       <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">
-          By <%= comment.owner.username%>
+          <%= comment.owner.username%> tarafından
         </h6>
         <p class="starability-result" data-rating="<%=comment.rating%>">
-          Rated: <%= comment.rating %> stars
+          Puan: <%= comment.rating %> stars
         </p>
         <p class="card-text">
-          <span class="font-weight-bold">Comment: </span><%= comment.body %>
+          <span class="font-weight-bold">Yorum: </span><%= comment.body %>
         </p>
         <% if( user && comment.owner.equals(user._id)) {%>
         <form
           action="/foods/<%=food._id%>/comments/<%=comment._id%>?_method=DELETE"
           method="POST"
         >
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger">Sil</button>
         </form>
         <% } %>
       </div>

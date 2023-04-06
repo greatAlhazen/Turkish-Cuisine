@@ -5,18 +5,20 @@
 <div class="card mb-4">
   <div class="row">
     <div class="col-md-5">
-      <img class="img-fluid" alt="" src="<%=food.images[0].url%>" />
+      <img
+        class="img-fluid"
+        alt="<%= food.title %>"
+        src="<%=food.images[0].url%>"
+      />
     </div>
     <div class="col-md-7">
       <div class="card-body">
         <h5 class="card-title"><%= food.title %></h5>
-        <h5 class="card-title"><%= food.title %></h5>
+        <p class="card-text"><%= food.description %></p>
         <p class="card-text">
           <small class="text-muted"><%= food.location%></small>
         </p>
-        <a class="btn btn-warning" href="/foods/<%=food._id%>"
-          >Go <%=food.title%></a
-        >
+        <a class="btn btn-warning" href="/foods/<%=food._id%>">Detay gör</a>
       </div>
     </div>
   </div>

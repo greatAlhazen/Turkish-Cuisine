@@ -1,7 +1,7 @@
 <% layout('layout/boilerplate')%>
 <div class="row">
-  <h1 class="text-center">New Food</h1>
-  <div class="col-6 offset-3">
+  <h1 class="text-center">Yeni yemek</h1>
+  <div class="col-md-6 offset-md-3">
     <form
       action="/foods"
       method="POST"
@@ -10,7 +10,7 @@
       class="form-validation"
     >
       <div class="mb-4">
-        <label class="form-label" for="title">Food Title</label>
+        <label class="form-label" for="title">Başlık</label>
         <input
           class="form-control"
           type="text"
@@ -18,10 +18,10 @@
           name="food[title]"
           required
         />
-        <div class="invalid-feedback">Please add title.</div>
+        <div class="invalid-feedback">Lütfen bir başlık ekle</div>
       </div>
       <div class="mb-4">
-        <label class="form-label" for="location">Food Location</label>
+        <label class="form-label" for="location">Şehir</label>
         <input
           class="form-control"
           type="text"
@@ -29,12 +29,12 @@
           name="food[location]"
           required
         />
-        <div class="invalid-feedback">Please choose location.</div>
+        <div class="invalid-feedback">Lütfen bir şehir ekle</div>
       </div>
       <div class="mb-4">
-        <label class="form-label" for="price">Food Price</label>
+        <label class="form-label" for="price">Fiyat</label>
         <div class="input-group">
-          <span class="input-group-text" id="price-label">$</span>
+          <span class="input-group-text" id="price-label">₺</span>
           <input
             type="text"
             class="form-control"
@@ -45,12 +45,12 @@
             name="food[price]"
             required
           />
-          <div class="invalid-feedback">Please define price.</div>
+          <div class="invalid-feedback">Lütfen bir fiyat gir</div>
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="form-label" for="description">Food Description</label>
+        <label class="form-label" for="description">Açıklama</label>
         <textarea
           class="form-control"
           type="text"
@@ -58,7 +58,7 @@
           name="food[description]"
           required
         ></textarea>
-        <div class="invalid-feedback">Please add description.</div>
+        <div class="invalid-feedback">Lütfen bir açıklama gir</div>
       </div>
       <div class="mb-4">
         <div class="form-file custom-file">
@@ -70,21 +70,23 @@
             multiple
             required
           />
-          <div class="invalid-feedback">Please solve all error</div>
+          <div class="invalid-feedback">
+            Lütfen dosya ile ilgili hatayı düzelt
+          </div>
           <label class="form-file-label" for="photo">
             <span class="form-file-text custom-file-label"
-              >Add more image or images</span
+              >Bir veya birden fazla resim ekle</span
             >
-            <span class="form-file-button">Browse</span>
+            <span class="form-file-button">Yükle</span>
           </label>
         </div>
         <div class="file-validation"></div>
       </div>
       <div class="mb-4">
-        <button class="btn btn-dark">Add Food</button>
+        <button class="btn btn-dark">Ekle</button>
       </div>
     </form>
-    <a href="/foods">All Foods</a>
+    <a href="/foods">Tüm yemekler</a>
   </div>
 </div>
 

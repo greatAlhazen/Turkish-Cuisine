@@ -1,6 +1,6 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="#">FoodApp</a>
+    <a class="navbar-brand" href="#">GreatAlhazen</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,22 +15,22 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item active">
-          <a class="nav-link px-3" href="/">Home</a>
+          <a class="nav-link px-3" href="/">Ana sayfa</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3" href="/foods">Foods</a>
+          <a class="nav-link px-3" href="/foods">Yemekler</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link px-3" href="/foods/new">New Food</a>
+          <a class="nav-link px-3" href="/foods/new">Yemek ekle</a>
         </li>
       </ul>
 
       <ul class="navbar-nav flex-row ml-auto">
         <% if(!user) {%>
-        <a class="nav-link" href="/signin">Login</a>
-        <a class="nav-link" href="/signup">Register</a>
+        <a class="nav-link" href="/signin">Giriş yap</a>
+        <a class="nav-link" href="/signup">Kayıt ol</a>
         <% } else {%>
-        <a class="nav-link" href="/logout">Logout</a>
+        <a class="nav-link" href="/logout">Çıkış</a>
         <% } %>
       </ul>
     </div>

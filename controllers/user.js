@@ -11,7 +11,7 @@ export const postRegister = async (req, res) => {
     const savedUser = await User.register(newUser, password);
     req.login(savedUser, (err) => {
       if (err) return next(err);
-      req.flash("success", "Welcome :)");
+      req.flash("success", "Hoşgeldin :)");
       res.redirect("/foods");
     });
   } catch (err) {
@@ -25,7 +25,7 @@ export const getLogin = (req, res) => {
 };
 
 export const postLogin = (req, res) => {
-  req.flash("success", "Welcome,nice to see you again :)");
+  req.flash("success", "Hoşgeldin, seni tekrar görmek güzel :)");
   const backUrl = req.session.returnTo || "/foods";
   delete req.session.returnTo;
   res.redirect(backUrl);
@@ -36,7 +36,7 @@ export const logout = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.flash("success", "Goodbye,see you soon!");
+    req.flash("success", "Hoşçakal!");
     res.redirect("/foods");
   });
 };

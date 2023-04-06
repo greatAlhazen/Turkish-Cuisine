@@ -19,7 +19,7 @@ export const createFood = async (req, res) => {
   food.geometry = { "type": "Point", "coordinates": [lng, lat] };
   food.owner = req.user._id;
   await food.save();
-  req.flash("success", "Successfully create food!");
+  req.flash("success", "Başarıyla yaratıldı!");
   res.redirect(`/foods/${food._id}`);
 };
 
@@ -37,7 +37,7 @@ export const getFood = async (req, res) => {
     })
     .populate("owner");
   if (!food) {
-    req.flash("error", "Cannot find food!");
+    req.flash("error", "Maalesed bulunamadı!");
     return res.redirect("/foods");
   }
   res.render("foods/one", { food });
@@ -73,20 +73,20 @@ export const updateFood = async (req, res) => {
     });
   }
 
-  req.flash("success", "Successfully updated food!");
+  req.flash("success", "Başarılı bir şekilde güncellendi!");
   res.redirect(`/foods/${food._id}`);
 };
 
 export const deleteFood = async (req, res) => {
   await Food.findByIdAndDelete(req.params.id);
-  req.flash("success", "Successfully deleted food!");
+  req.flash("success", "Başarıyla silindi!");
   res.redirect("/foods");
 };
 
 export const getEditPage = async (req, res) => {
   const food = await Food.findById(req.params.id);
   if (!food) {
-    req.flash("error", "Cannot find food!");
+    req.flash("error", "Maalasef bulunamadı!");
     return res.redirect("/foods");
   }
   res.render("foods/edit", { food });

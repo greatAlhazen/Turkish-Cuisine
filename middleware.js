@@ -6,7 +6,7 @@ import Comment from "./models/comment.js";
 export const loggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.returnTo = req.originalUrl;
-    req.flash("error", "You are not signed-in");
+    req.flash("error", "Öncelikle giriş yapmalısın");
     return res.redirect("/signin");
   }
 
@@ -36,7 +36,7 @@ export const commentValidation = (req, res, next) => {
 export const isOwner = async (req, res, next) => {
   const food = await Food.findById(req.params.id);
   if (!food.owner.equals(req.user._id)) {
-    req.flash("error", "You can't do that");
+    req.flash("error", "Buna yetkili değilsin");
     return res.redirect(`/foods/${req.params.id}`);
   }
   next();
@@ -45,7 +45,7 @@ export const isOwner = async (req, res, next) => {
 export const isCommentOwner = async (req, res, next) => {
   const comment = await Comment.findById(req.params.commentId);
   if (!comment.owner.equals(req.user._id)) {
-    req.flash("error", "You can't do that");
+    req.flash("error", "Buna yetkili değilsin");
     return res.redirect(`/foods/${req.params.foodId}`);
   }
   next();

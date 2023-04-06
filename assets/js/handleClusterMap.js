@@ -5,6 +5,8 @@ let map = new maplibregl.Map({
   zoom: 4,
 });
 
+map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+
 map.on("load", function () {
   // Add a new source from our GeoJSON data and
   // set the 'cluster' option to true. GL-JS will

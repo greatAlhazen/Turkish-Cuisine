@@ -9,7 +9,7 @@ export const createComment = async (req, res) => {
   food.comments.push(comment);
   await comment.save();
   await food.save();
-  req.flash("success", "Created comment!");
+  req.flash("success", "Başarıyla oluşturuldu!");
   res.redirect(`/foods/${food._id}`);
 };
 
@@ -19,6 +19,6 @@ export const deleteComment = async (req, res) => {
     $pull: { comments: commentId },
   });
   await Comment.findByIdAndDelete(commentId);
-  req.flash("success", "Successfully deleted comment");
+  req.flash("success", "Başarıyla silindi");
   res.redirect(`/foods/${foodId}`);
 };

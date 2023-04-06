@@ -8,14 +8,14 @@ fileInput.addEventListener("change", () => {
 
   // file length check
   if (fileInput.files.length > 4) {
-    invalid.innerHTML = "You can not add more than 4";
+    invalid.innerHTML = "Dörten fazla resim giremezsin";
     fileInput.value = "";
   } else {
     // file type check
     for (let i = 0; i < fileInput.files.length; i++) {
       if (!validType.includes(fileInput.files[i].type)) {
-        invalid.innerHTML = `You can't add ${fileInput.files[i].type},
-            please add jpg,png or jpeg`;
+        invalid.innerHTML = `${fileInput.files[i].type} tipte değer giremezsin,
+        lütfen png,jpeg veya jpg ekle`;
         fileInput.value = "";
       } else {
         invalid.innerHTML = "";
@@ -26,7 +26,7 @@ fileInput.addEventListener("change", () => {
     }
     // max size check
     if (maxSize > 1024 * 1024 * 5) {
-      invalid.innerHTML = `Total size must be less than 5MB`;
+      invalid.innerHTML = `Toplam boyut 5MB tan fazla olmamalıdır`;
       fileInput.value = "";
       maxSize = 0;
     } else {
