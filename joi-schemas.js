@@ -1,18 +1,43 @@
-import Joi from "joi";
+import BaseJoi from "joi";
+import sanitizeHtml from "sanitize-html";
+
+// for guard malware scripts
+const extension = (joi) => ({
+  type: "string",
+  base: joi.string(),
+  messages: {
+    "string.escapeHTML": "{{#label}} must not include HTML!",
+  },
+  rules: {
+    escapeHTML: {
+      validate(value, helpers) {
+        const clean = sanitizeHtml(value, {
+          allowedTags: [],
+          allowedAttributes: {},
+        });
+        if (clean !== value)
+          return helpers.error("string.escapeHTML", { value });
+        return clean;
+      },
+    },
+  },
+});
+
+const Joi = BaseJoi.extend(extension);
 
 export const foodSchema = Joi.object({
   food: Joi.object({
-    title: Joi.string().required().max(25),
+    title: Joi.string().required().max(25).escapeHTML(),
     price: Joi.number().required().min(0),
-    location: Joi.string().required(),
-    description: Joi.string().required(),
+    location: Joi.string().required().escapeHTML(),
+    description: Joi.string().required().escapeHTML(),
   }).required(),
   images: Joi.array(),
 });
 
 export const commentSchema = Joi.object({
   comment: Joi.object({
-    body: Joi.string().required(),
+    body: Joi.string().required().escapeHTML(),
     rating: Joi.number().required().min(1).max(10),
   }),
 });

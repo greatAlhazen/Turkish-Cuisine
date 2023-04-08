@@ -85,7 +85,12 @@
       </div>
       <div class="mb-3">
         <% food.images.forEach(function(image, index) { %>
-        <img src="<%=image.smallSize %>" class="img-thumbnail" alt="" />
+        <img
+          crossorigin="anonymous"
+          src="<%=image.smallSize %>"
+          class="img-thumbnail"
+          alt=""
+        />
         <div class="form-check-inline">
           <input
             type="checkbox"

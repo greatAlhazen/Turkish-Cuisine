@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 import Comment from "./comment.js";
+import { cloudinaryVTwo } from "../config/cloudinary.js";
 
 const PhotoSchema = new Schema({
   url: String,

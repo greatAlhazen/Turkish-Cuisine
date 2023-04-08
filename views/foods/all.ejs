@@ -6,6 +6,7 @@
   <div class="row">
     <div class="col-md-5">
       <img
+        crossorigin="anonymous"
         class="img-fluid"
         alt="<%= food.title %>"
         src="<%=food.images[0].url%>"
@@ -32,4 +33,4 @@
   const foods = {features: <%- JSON.stringify(foods) %>};
 </script>
 
-<script src="/js/handleClusterMap.js"></script>
+<script type="text/javascript" src="/js/handleClusterMap.js"></script>
