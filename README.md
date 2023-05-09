@@ -47,7 +47,7 @@ MAP_API: <YOUR_MAPTILER_API_KEY>
 npm start
 ```
 
-- After those get into browser and specified http://localhost:<YOUR_PORT>
+- After those get into browser and go to specified http://localhost:<YOUR_PORT>
 
 ## Dependencies
 
